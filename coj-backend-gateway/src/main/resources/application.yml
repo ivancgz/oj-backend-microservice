@@ -1,0 +1,36 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+    gateway:
+      routes:
+        - id: coj-backend-user-service
+          uri: lb://coj-backend-user-service
+          predicates:
+            - Path=/api/user/**
+        - id: coj-backend-question-service
+          uri: lb://coj-backend-question-service
+          predicates:
+            - Path=/api/question/**
+        - id: coj-backend-judge-service
+          uri: lb://coj-backend-judge-service
+          predicates:
+            - Path=/api/judge/**
+  application:
+    name: coj-backend-gateway
+  main:
+    web-application-type: reactive
+server:
+  port: 8101
+knife4j:
+  gateway:
+    # 开启 gateway 聚合组件
+    enabled: true
+    # 设置聚合模式采用 discover 服务发现的模式
+    strategy: discover
+    discover:
+      # 开启 discover 模式
+      enabled: true
+      # 聚合子服务全部为 Swagger2 规范的文档
+      version: swagger2
